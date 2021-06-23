@@ -6,7 +6,7 @@ To use this API:
 ```
 pip install -r requirements.txt
 ```
--then
+- then
 ```
 python application.py
 ```

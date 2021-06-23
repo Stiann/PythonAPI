@@ -1,0 +1,24 @@
+1. students
+id 
+name
+surname
+class
+
+2. teacher
+id
+name
+surname
+subject
+
+3. grades
+id grade
+id student
+id teacher
+subject
+grade
+
+4. classes
+id
+year
+name(section)
+coordinator

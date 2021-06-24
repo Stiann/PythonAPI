@@ -2,22 +2,22 @@
 id 
 name
 surname
-class
+course
 
 2. teacher
 id
 name
 surname
-subject
+course
 
 3. grades
-id grade
+id
 id student
 id teacher
-subject
+course
 grade
 
-4. classes
+4. courses
 id
 year
 name(section)

@@ -1,0 +1,21 @@
+TOKEN = HEADER.PAYLOAD.SIGNATURE
+
+PAYLOAD = 
+{
+    "something": "id"
+}
+
+log in
+as student 
+
+TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwic29tZXRoaW5nIjoic29tZXRoaW5nc2Vsc2UiLCJpYXQiOjE1MTYyMzkwMjJ9.0Ykhm96cD6I0mVQzlchdcXt5UumG9KOeqyUiQdK8Qj8"
+
+JS 
+
+atob(token.split('.')[1])['something'] = "id"
+
+
+grades/id
+
+MY grades YAY
+

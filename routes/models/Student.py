@@ -2,6 +2,8 @@ from shared import db
 
 class Student(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	username = db.Column(db.String(16), nullable=False)
+	password = db.Column(db.String, nullable=False)
 	name = db.Column(db.String(30), nullable=False)
 	surname = db.Column(db.String(30), nullable=False)
 	course = db.Column(db.String(30), nullable=False)

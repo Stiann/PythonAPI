@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from shared import db
 from .models.Student import Student
+from .models.Course import Course
 
 studentsroute_blueprint = Blueprint('studentsroute_blueprint', __name__)
 
@@ -11,10 +12,19 @@ def get_students():
 	output = []
 	# serializing
 	for student in students:
-		student_data = {"id": student.id, 
+		courses = []
+		for course in student.course_info:
+			thecourse = Course.query.get(course.id)
+			thecourse_info = {
+				"id": thecourse.id,
+				"name": thecourse.name
+			}
+		courses.append(thecourse_info)
+		student_data = {"id": student.id,
+						"username": student.username,
                   		"name": student.name, 
-                    	"surname": student.surname, 
-                     	"course": student.course}
+                    	"surname": student.surname,
+                     	"courses": courses}
 		output.append(student_data)
 	return {"students": output}
 
@@ -24,42 +34,19 @@ def get_student(id):
 	student = Student.query.get(id)
 	if student is None:
 		return {"message": "Not Found"}, 404
+	courses = []
+	for course in student.course_info:
+		thecourse = Course.query.get(course.id)
+		thecourse_info = {
+			"id": thecourse.id,
+			"name": thecourse.name
+		}
+	courses.append(thecourse_info)
 	return {"id": student.id, 
+	   		"username": student.username,
          	"name": student.name, 
 			"surname": student.surname, 
-			"course": student.course}
-
-
-@studentsroute_blueprint.route('/students', methods=['POST'])
-def post_student():
-    
-	try:
-	    if len(request.json['name']) > 30:
-	        return {"message": "name cannot be longer than 30 characters"}, 400
-	except:
-		return {"message": "JSON requires to have name"}, 400
-
-	try:
-	    if len(request.json['surname']) > 30:
-	        return {"message": "surname cannot be longer than 30 characters"}, 400
-	except:
-	    return {"message": "JSON requires to have surname"}, 400
-
-	try:
-	    if len(request.json['course']) > 30:
-	    	return {"message": "course cannot be longer than 30 characters"}, 400
-	except:
-		return {"message": "JSON requires to have course"}, 400
-    
-	student = Student(name=request.json['name'], 
-					  surname=request.json['surname'], 
-					  course=request.json['course'])
-	db.session.add(student)
-	db.session.commit()
-	return {"id": student.id, 
-			"name": student.name, 
-			"surname": student.surname,
-			"course": student.course}, 201
+			"courses": courses}
 
 
 @studentsroute_blueprint.route('/students/<id>', methods=['PUT'])
@@ -82,27 +69,24 @@ def put_student(id):
 	except:
 	    return {"message": "JSON requires to have surname"}, 400
  
-	try:
-	    if len(request.json['course']) > 30:
-	        return {"message": "course cannot be longer than 30 characters"}, 400
-	    student.course = request.json['course']
-	except:
-	    return {"message": "JSON requires to have course"}, 400
-
-	
 	db.session.commit()
 	return {"id": student.id, 
          	"name": student.name, 
-          	"surname": student.surname, 
-           	"course": student.course}
+          	"surname": student.surname}
 
 
 @studentsroute_blueprint.route('/students/<id>', methods={'DELETE'})
 def delete_student(id):
-	student = Student.query.get(id)
-	if student is None:
-		return {"message": "Student not Found"}, 404
-	db.session.delete(student)
-	db.session.commit()
-	return {"message": "Student deleted successfully"}, 204
+	try:
+		if request.json['confirm'] == True:
+			student = Student.query.get(id)
+			if student is None:
+				return {"message": "Student not Found"}, 404
+			student.disabled = True
+			db.session.commit()
+			return {"message": "Student deleted successfully"}, 204
+		else:
+			return {"message": "Confirmation needed"}, 400
+	except:
+		return {"message": "Confirmation needed"}, 400
 

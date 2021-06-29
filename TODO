@@ -1,0 +1,5 @@
+✔double confirmation on deletes
+✔uuid
+✔many to many relationships between students and courses
+✔review where course is string and not as ID of a course that exists
+✔fix login errors

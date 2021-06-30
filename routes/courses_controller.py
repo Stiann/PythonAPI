@@ -37,6 +37,9 @@ def get_course():
 
 @coursesroute_blueprint.route('/courses/<id>', methods=['GET'])
 def get_course_all(id):
+    if len(id) != 36:
+        return {"message": "ID not valid"}
+    
     course = Course.query.get(id)
     if course is None:
 	    return {"message": "Not Found"}, 404
@@ -72,6 +75,8 @@ def post_course():
     except:
         return {"message": "JSON requires name"}, 400
     try:
+        if len(request.json['teacher']) != 36:
+            return {"message": "ID is not valid"}
         teacher = Teacher.query.get(request.json['teacher'])
         if teacher is None:
             return {"message": "teacher not found"}, 404
@@ -96,6 +101,10 @@ def post_course():
 
 @coursesroute_blueprint.route('/courses/<id>', methods=['PUT'])
 def put_course(id):
+    
+    if len(id) != 36:
+        return {"message": "ID not valid"}
+    
     course = Course.query.get(id)
     
     if course is None:
@@ -109,6 +118,8 @@ def put_course(id):
         return {"message": "JSON must contain name"}, 400
     
     try:
+        if len(request.json['teacher']) != 36:
+            return {"message": "ID not valid"}
         teacher = Teacher.query.get(request.json['teacher'])
         if teacher is None:
             return {"message": "Teacher with that ID does not exist"}, 400

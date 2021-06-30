@@ -14,12 +14,12 @@ def get_grades():
     output = []
 	# serializing
     for grade in grades:
-        student = Student.query.get(grade.id_student)
+        student = Student.query.get(grade.student)
         student_data = {"id": student.id,
                 "name": student.name,
                 "surname": student.surname}
     
-        teacher = Teacher.query.get(grade.id_teacher)
+        teacher = Teacher.query.get(grade.teacher)
         teacher_data = {"id": teacher.id, 
                     "name": teacher.name, 
                     "surname": teacher.surname}
@@ -41,11 +41,13 @@ def get_grades():
 
 @gradesroute_blueprint.route('/grades/<id>', methods=['GET'])
 def get_grade(id):
+    if len(id) != 36:
+        return {"message": "ID not valid"}
     grade = Grade.query.get(id)
     if grade is None:
 	    return {"message": "Not Found"}, 404
     
-    student = Student.query.get(grade.id_student)
+    student = Student.query.get(grade.student)
     student_data = {"id": student.id,
                     "username": student.username,
                     "name": student.name,
@@ -56,7 +58,7 @@ def get_grade(id):
     course_data = {"id": course.id,
                    "name": course.name}
     
-    teacher = Teacher.query.get(grade.id_teacher)
+    teacher = Teacher.query.get(grade.teacher)
     teacher_data = {"id": teacher.id, 
                     "username": teacher.username,
                     "name": teacher.name, 
@@ -72,8 +74,9 @@ def get_grade(id):
 @gradesroute_blueprint.route('/grades', methods=['POST'])
 def post_grade():
     try:
+        if len(request.json['student']) != 36:
+            return {"message": "ID not valid"}, 400
         student = Student.query.get(request.json['student'])
-        print(student.disabled)
         if student is None:
             return {"message": "Student with that ID does not exist"}, 400
         if student.disabled is True:
@@ -82,6 +85,8 @@ def post_grade():
         return {"message": "JSON requires student"}
     
     try:
+        if len(request.json['teacher']) != 36:
+            return {"message": "ID not valid"}, 400
         teacher = Teacher.query.get(request.json['teacher'])
         if teacher is None:
             return {"message": "Teacher with that ID does not exist"}, 400
@@ -89,6 +94,8 @@ def post_grade():
         return {"message": "JSON requires teacher"}
     
     try:
+        if len(request.json['course']) != 36:
+            return {"message": "ID not valid"}, 400
         course = Course.query.get(request.json['course'])
         if course is None:
             return {"message": "Course with that ID doe no exist"}, 400
@@ -100,8 +107,8 @@ def post_grade():
     except:
         return {"message": "JSON requires grade"}
     
-    grade = Grade(id_student=request.json['student'], 
-                  id_teacher=request.json['teacher'],
+    grade = Grade(student=request.json['student'], 
+                  teacher=request.json['teacher'],
                   course=request.json['course'],
                   grade=request.json['grade'])
     db.session.add(grade)
@@ -126,6 +133,9 @@ def post_grade():
 
 @gradesroute_blueprint.route('/grades/<id>', methods=['PUT'])
 def put_grade(id):
+    if len(id) != 36:
+    	return {"message": "ID is not valid"}
+    
     grade = Grade.query.get(id)
     
     if grade is None:

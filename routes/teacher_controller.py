@@ -32,35 +32,46 @@ def get_teacher(id):
 
 @teachersroute_blueprint.route('/teachers/<id>', methods=['PUT'])
 def put_teacher(id):
+	if len(id) != 36:
+		return {"message": "ID is not valid"}
 	teacher = Teacher.query.get(id)
 	if teacher is None:
 		return {"message": "Not Found"}, 404
 
 	try:
-	    if len(request.json['name']) > 30:
-	        return {"message": "name cannot be longer than 30 characters"}, 400
-	    teacher.name = request.json['name']
+		if len(request.json['name']) > 30:
+			return {"message": "name cannot be longer than 30 characters"}, 400
+		teacher.name = request.json['name']
 	except:
-	    return {"message": "JSON requires to have name"}, 400
+		return {"message": "JSON requires to have name"}, 400
 
 	try:
-	    if len(request.json['surname']) > 30:
-	        return {"message": "surname cannot be longer than 30 characters"}, 400
-	    teacher.surname = request.json['surname']
+		if len(request.json['surname']) > 30:
+			return {"message": "surname cannot be longer than 30 characters"}, 400
+		teacher.surname = request.json['surname']
 	except:
-	    return {"message": "JSON requires to have surname"}, 400
+		return {"message": "JSON requires to have surname"}, 400
+
+	try:
+		if len(request.json['username']) > 16:
+			return {"message": "username cannot be longer than 16 characters"}, 400
+		teacher.username = request.json['username']
+	except:
+		return {"message": "JSON requires to have username"}, 400
 
 	db.session.commit()
- 
+
 	return {"id": teacher.id, 
-         	"username": teacher.username,
-            "name": teacher.name, 
-            "surname": teacher.surname}
+			"username": teacher.username,
+			"name": teacher.name, 
+			"surname": teacher.surname}
 
 
 @teachersroute_blueprint.route('/teachers/<id>', methods={'DELETE'})
 def delete_teacher(id):
-	try:	
+	try:
+		if len(id) != 36:
+    			return {"message": "ID is not valid"}
 		if request.json['confirm'] == True:
 			teacher = Teacher.query.get(id)
 			if teacher is None:

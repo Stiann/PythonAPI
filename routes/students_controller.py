@@ -51,6 +51,9 @@ def get_student(id):
 
 @studentsroute_blueprint.route('/students/<id>', methods=['PUT'])
 def put_student(id):
+	if len(id) != 36:
+	    return {"message": "ID is not valid"}
+    
 	student = Student.query.get(id)
 	if student is None:
 		return {"message": "Not Found"}, 404
@@ -68,9 +71,17 @@ def put_student(id):
 	    student.surname = request.json['surname']
 	except:
 	    return {"message": "JSON requires to have surname"}, 400
- 
+	
+	try:
+	    if len(request.json['username']) > 16:
+	        return {"message": "username cannot be longer than 16 characters"}, 400
+	    student.username = request.json['username']
+	except:
+	    return {"message": "JSON requires to have username"}, 400
+     
 	db.session.commit()
 	return {"id": student.id, 
+			"username":student.username,
          	"name": student.name, 
           	"surname": student.surname}
 
@@ -78,6 +89,8 @@ def put_student(id):
 @studentsroute_blueprint.route('/students/<id>', methods={'DELETE'})
 def delete_student(id):
 	try:
+		if len(id) != 36:
+			return {"message": "ID is not valid"}
 		if request.json['confirm'] == True:
 			student = Student.query.get(id)
 			if student is None:

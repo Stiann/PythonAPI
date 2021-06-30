@@ -16,6 +16,8 @@ python application.py
 
 DB is formed by 5 tables: student, grade, course, teacher, students_courses
 
+To see what is inside the file database.db after the app is started, is suggested the use of this site: https://inloop.github.io/sqlite-viewer/
+
 ACCOUNT SECTION:
 
 - POST /register

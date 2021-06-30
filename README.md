@@ -34,11 +34,17 @@ requires:
 note: types available are "student" and "teacher", "course" is necessary only when registering a student
 
 possible errors on:
+
 username: missing, longer than 16 characters
+
 password: missing, shorter than 8 characters
+
 name: missing, longer than 30 characters
+
 surname: missing, longer than 30 characters
+
 type: missing, not student nor teacher
+
 course: missing if type=student, course ID not valid, course does not exist
 
 returns: 
@@ -63,7 +69,9 @@ requires:
 ```
 
 possible errors on:
+
 username: missing, longer than 16 characters
+
 password: missing, shorter than 8 characters
 
 if teacher: disabled, deleted before
@@ -134,6 +142,7 @@ response:
 ```
 
 possible errors on:
+
 id: not valid (not long 36 char, UUID included "-"s), no course with this id found
 
 - POST /courses
@@ -147,7 +156,9 @@ requires:
 ```
 
 possible errors on:
+
 name: missing, longer than 30 characters
+
 teacher: missing, ID not valid, teacher does not exist
 
 response:
@@ -175,8 +186,11 @@ requires:
 ```
 
 possible errors on:
-id: not valid
+
+id: not valid, not found
+
 name: missing, longer than 30 characters
+
 teacher: missing, id not valid, teacher does not exist
 
 - DELETE /courses/id
@@ -191,7 +205,9 @@ requires:
 DELETE disables the course, no student can enter this course on /register
 
 possible errors on:
+
 id: not valid, course not found
+
 confirm: missing or set to false
 
 GRADES
@@ -251,6 +267,7 @@ response:
 ```
 
 possible errors on:
+
 id: not valid, grade not found
 
 - POST /grades
@@ -266,9 +283,13 @@ requires:
 ```
 
 possible errors on:
+
 student: missing, id not valid, student not found, student disabled
+
 teacher: missing, id not valid, teacher not found
+
 course: missing, id not valid, course not found
+
 grade: missing, less than 0 and bigger than 10
 
 response:
@@ -306,9 +327,13 @@ requires:
 ```
 
 possible errors on:
+
 student: missing, id not valid, student not found
+
 teacher: missing, id not valid, teacher not found
+
 course: missing, id not valid, course not found
+
 grade: missing, less than 0 and bigger than 10
 
 - DELETE /grades/id
@@ -323,6 +348,7 @@ requires:
 DELETE grade deletes the grade if it is confirmed
 
 possible errors on:
+
 confirm: missing or set to false
 
 STUDENTS
@@ -368,6 +394,7 @@ response:
 ```
 
 possible errors on:
+
 id: not valid, not found
 
 - PUT /students/id
@@ -382,9 +409,13 @@ requires:
 ```
 
 possible errors on:
+
 id: not valid, not found
+
 username: missing, longer than 16 characters
+
 name: missing, longer than 30 characters
+
 surname: missing, longer than 30 characters
 
 response:
@@ -409,6 +440,7 @@ requires:
 ```
 
 possible errors on:
+
 confirm: missing or set to false
 
 TEACHERS
@@ -432,6 +464,7 @@ response:
 - GET ONE /teachers/id
 
 possible errors on:
+
 id: not valid or not found
 
 response:
@@ -456,9 +489,13 @@ requires:
 ```
 
 possible errors on:
+
 id: not valid, not found
+
 username: missing, longer than 16 characters
+
 name: missing, longer than 30 characters
+
 surname: missing, longer than 30 characters
 
 - DELETE /teachers/id
@@ -473,4 +510,5 @@ requires:
 ```
 
 possible errors on:
+
 confirm: missing or set to false
